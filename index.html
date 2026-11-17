@@ -310,6 +310,11 @@ const fa = n => Number(n || 0).toLocaleString('fa-IR');
 const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
 const fmtDate = d => d ? new Intl.DateTimeFormat('fa-IR', {dateStyle:'medium'}).format(new Date(d)) : '';
 const app = $('#app');
+function setMeta(name, content) {
+  let m = document.querySelector(`meta[name="${name}"]`);
+  if (!m) { m = document.createElement('meta'); m.name = name; document.head.appendChild(m); }
+  m.content = content;
+}
 let toastT;
 function toast(msg, err) {
   const t = $('#toast'); t.textContent = msg; t.className = 'show' + (err ? ' err' : '');
@@ -399,7 +404,8 @@ function cardHTML(a) {
 function observe() {
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } }), {threshold: .08});
   $$('.reveal:not(.in-view)').forEach(el => io.observe(el));
-  $$('.card').forEach(c => {
+  $$('.card:not([data-tilt])').forEach(c => {
+    c.dataset.tilt = '1';
     c.addEventListener('mousemove', e => {
       const r = c.getBoundingClientRect();
       c.style.setProperty('--ry', ((e.clientX - r.left) / r.width - .5) * 6 + 'deg');
@@ -414,16 +420,18 @@ function countUp(el, to) {
 }
 function setupNotice() {
   app.innerHTML = `<div class="wrap"><div class="glass notice"><h3>⚙️ اتصال به Supabase تنظیم نشده</h3>
-  <p>در ابتدای بخش اسکریپت فایل <code>index.html</code> مقدار <code>SUPABASE_URL</code> و <code>SUPABASE_ANON_KEY</code> را وارد کنید (Project Settings → API). سپس فایل <code>supabase.sql</code> را یک‌بار در SQL Editor اجرا کنید تا جدول‌ها، دسته‌بندی‌ها و سه مقاله اولیه ساخته شوند.</p></div></div>`;
+  <p>در ابتدای بخش اسکریپت فایل <code>index.html</code> مقدار <code>SUPABASE_URL</code> و <code>SUPABASE_ANON_KEY</code> را وارد کنید (Project Settings → API). پس از ذخیره، صفحه را دوباره باز کنید.</p></div></div>`;
 }
 function dbError(e) {
   app.innerHTML = `<div class="wrap"><div class="glass notice"><h3>خطا در ارتباط با پایگاه داده</h3>
-  <p>${esc(e.message || e)}</p><p style="margin-top:8px;color:var(--muted)">مطمئن شوید فایل <code>supabase.sql</code> اجرا شده و URL و کلید درست‌اند.</p></div></div>`;
+  <p>${esc(e.message || e)}</p><p style="margin-top:8px;color:var(--muted)">مطمئن شوید URL و کلید Supabase درست است و جدول‌های sg_ ساخته شده‌اند.</p></div></div>`;
 }
 
 /* ============================== HOME ============================== */
 async function renderHome() {
   document.title = 'شگفتی‌دان | دنیا را متفاوت ببین!';
+  setMeta('robots', 'index, follow');
+  setMeta('description', 'شگفتی‌دان؛ دانشنامه شگفتی‌های جهان. جذاب‌ترین مطالب علمی، نجوم، طبیعت، تاریخ و فناوری.');
   if (!sb) return setupNotice();
   app.innerHTML = `<div class="wrap"><div class="skel" style="margin:60px 0"></div><div class="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>`;
   filter = {q: '', cat: 'all', sort: 'new'};
@@ -508,6 +516,8 @@ async function renderArticle(slug) {
   if (error) return dbError(error);
   if (!a) { app.innerHTML = `<div class="wrap"><div class="empty"><div class="big">🛸</div><h2>این مقاله پیدا نشد</h2><br><a class="btn" href="#/">بازگشت به صفحه اصلی</a></div></div>`; return; }
   document.title = a.title + ' | شگفتی‌دان';
+  setMeta('robots', 'index, follow');
+  setMeta('description', a.summary || a.title);
   const cat = catOf(a.category), liked = localStorage.getItem('sg_like_' + a.id) === '1';
   const related = ARTS.filter(x => x.category === a.category && x.id !== a.id).slice(0, 3);
   app.innerHTML = `<article class="article">
@@ -588,6 +598,7 @@ async function loadArticleComments(articleId) {
 let adminTab = 'articles';
 async function renderAdmin(sub) {
   document.title = 'پنل مدیریت | شگفتی‌دان';
+  setMeta('robots', 'noindex, nofollow');
   if (!sb) return setupNotice();
   const {data: {session}} = await sb.auth.getSession();
   if (!session) return renderLogin();
@@ -595,7 +606,7 @@ async function renderAdmin(sub) {
   if (error) return dbError(error);
   if (!adm) {
     app.innerHTML = `<div class="wrap"><div class="glass notice"><h3>دسترسی مدیر ندارید</h3>
-    <p>این حساب (${esc(session.user.email)}) در لیست مدیران نیست. دستور SQL انتهای فایل <code>supabase.sql</code> را برای ایمیل خود اجرا کنید.</p>
+    <p>این حساب (${esc(session.user.email)}) در لیست مدیران نیست. مالک پروژه باید این کاربر را در جدول <code>sg_admins</code> ثبت کند.</p>
     <br><button class="btn ghost" id="lo">خروج</button></div></div>`;
     $('#lo').onclick = async () => { await sb.auth.signOut(); renderAdmin(); };
     return;
@@ -649,13 +660,13 @@ async function renderDashboard(user) {
       <td><span class="st ${x.status === 'published' ? 'p' : 'd'}">${x.status === 'published' ? 'منتشر شده' : 'پیش‌نویس'}</span></td>
       <td>${fa(x.views)}</td><td>${fmtDate(x.updated_at)}</td>
       <td><div class="row-act"><a class="btn ghost sm" href="#/admin/edit/${esc(x.id)}">ویرایش</a>
-      <button class="btn ghost sm" data-tg="${esc(x.id)}" data-s="${esc(x.status)}">${x.status === 'published' ? 'لغو انتشار' : 'انتشار'}</button>
+      <button class="btn ghost sm" data-tg="${esc(x.id)}" data-s="${esc(x.status)}" data-pub="${esc(x.published_at || '')}">${x.status === 'published' ? 'لغو انتشار' : 'انتشار'}</button>
       ${x.status === 'published' ? `<a class="btn ghost sm" href="#/a/${esc(x.slug)}">مشاهده</a>` : ''}
       <button class="btn danger sm" data-del="${esc(x.id)}">حذف</button></div></td></tr>`).join('') || '<tr><td colspan="6" class="empty">هنوز مقاله‌ای نیست</td></tr>'}
     </tbody></table></div>`;
     $$('[data-tg]', tb).forEach(b => b.onclick = async () => {
       const to = b.dataset.s === 'published' ? 'draft' : 'published';
-      const patch = {status: to}; if (to === 'published') patch.published_at = new Date().toISOString();
+      const patch = {status: to}; if (to === 'published' && !b.dataset.pub) patch.published_at = new Date().toISOString();
       const {error} = await sb.from('sg_articles').update(patch).eq('id', b.dataset.tg);
       error ? toast(error.message, true) : (toast('وضعیت تغییر کرد ✅'), renderDashboard(user));
     });
@@ -729,7 +740,7 @@ async function renderEditor(id) {
         <input class="in dir-ltr" id="cu" placeholder="https://…" value="${esc(a.cover_url || '')}"></div>
       <div class="field"><label>دسته‌بندی</label><select class="in" id="cat">${CATS.map(c => `<option value="${esc(c.slug)}" ${c.slug === a.category ? 'selected' : ''}>${esc(c.icon)} ${esc(c.name)}</option>`).join('')}</select></div>
       <div class="field"><label>برچسب‌ها (با ویرگول جدا کنید)</label><input class="in" id="tg" value="${esc((a.tags || []).join('، '))}"></div>
-      <div class="field"><label>آدرس مقاله (slug لاتین)</label><input class="in dir-ltr" id="sl" required pattern="[a-z0-9\-]+" value="${esc(a.slug)}"></div>
+      <div class="field"><label>آدرس مقاله (slug لاتین، خالی بماند خودکار ساخته می‌شود)</label><input class="in dir-ltr" id="sl" pattern="[a-z0-9\-]+" value="${esc(a.slug)}"></div>
       <label class="switch"><input type="checkbox" id="ft" ${a.featured ? 'checked' : ''}> مقاله ویژه (در صفحه اصلی)</label>
       <div class="field"><label>وضعیت انتشار</label><select class="in" id="st"><option value="draft" ${a.status === 'draft' ? 'selected' : ''}>پیش‌نویس</option><option value="published" ${a.status === 'published' ? 'selected' : ''}>منتشر شده</option></select></div>
       <button class="btn" style="width:100%" id="sv">💾 ذخیره</button>
@@ -773,18 +784,19 @@ async function renderEditor(id) {
     const content = $('#c').value, words = content.trim().split(/\s+/).filter(Boolean).length;
     const status = $('#st').value;
     const row = {
-      title: $('#t').value.trim(), slug: $('#sl').value.trim(), summary: $('#s').value.trim(), content,
+      title: $('#t').value.trim(), slug: $('#sl').value.trim() || ('post-' + Date.now().toString(36)), summary: $('#s').value.trim(), content,
       category: $('#cat').value, tags: $('#tg').value.split(/[,،]/).map(x => x.trim()).filter(Boolean),
       cover_url: safeUrl($('#cu').value.trim()) || null, status, featured: $('#ft').checked,
       read_minutes: Math.max(1, Math.ceil(words / 180))
     };
     if (status === 'published' && !a.published_at) row.published_at = new Date().toISOString();
     const b = $('#sv'); b.disabled = true; b.textContent = 'در حال ذخیره…';
-    // only one featured article at a time
-    if (row.featured) await sb.from('sg_articles').update({featured: false}).eq('featured', true).neq('id', id || '00000000-0000-0000-0000-000000000000');
-    const {error} = id ? await sb.from('sg_articles').update(row).eq('id', id) : await sb.from('sg_articles').insert(row);
+    const saved = id ? await sb.from('sg_articles').update(row).eq('id', id).select('id').single()
+      : await sb.from('sg_articles').insert(row).select('id').single();
     b.disabled = false; b.textContent = '💾 ذخیره';
-    if (error) return toast(error.code === '23505' ? 'این آدرس (slug) قبلاً استفاده شده' : error.message, true);
+    if (saved.error) return toast(saved.error.code === '23505' ? 'این آدرس (slug) قبلاً استفاده شده' : saved.error.message, true);
+    // only one featured article at a time: clear the flag on the others only after a successful save
+    if (row.featured) await sb.from('sg_articles').update({featured: false}).eq('featured', true).neq('id', saved.data.id);
     toast('ذخیره شد ✅'); location.hash = '#/admin';
   });
 }
