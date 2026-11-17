@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شگفتی‌دان | دنیا را متفاوت ببین!</title>
+<meta name="description" content="شگفتی‌دان؛ دانشنامه شگفتی‌های جهان. جذاب‌ترین مطالب علمی، نجوم، طبیعت، تاریخ و فناوری.">
+<meta name="theme-color" content="#04060f">
+<meta property="og:title" content="شگفتی‌دان | دنیا را متفاوت ببین!">
+<meta property="og:description" content="جذاب‌ترین مطالب علمی، نجوم، طبیعت، تاریخ و فناوری در یک نگاه.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --space:#04060f; --navy:#0a1330; --navy2:#0f1d4a;
+  --blue:#2f7bff; --turq:#22e1d3; --gold:#f5c542; --white:#f4f8ff;
+  --muted:#9fb0d6; --line:rgba(255,255,255,.1); --glass:rgba(255,255,255,.055);
+  --danger:#ff5c7a; --ok:#4ade80;
+  --r:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Vazirmatn',Tahoma,sans-serif;background:var(--space);color:var(--white);
+  line-height:1.9;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;color:inherit}
+input,textarea,select{font-family:inherit;color:var(--white)}
+img{max-width:100%;display:block}
+::selection{background:var(--blue);color:#fff}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--space)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--blue),var(--turq));border-radius:10px}
+
+#stars{position:fixed;inset:0;z-index:-3;width:100%;height:100%}
+.nebula{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+   radial-gradient(60% 50% at 85% 8%,rgba(47,123,255,.28),transparent 60%),
+   radial-gradient(50% 45% at 8% 30%,rgba(124,92,255,.22),transparent 60%),
+   radial-gradient(55% 50% at 70% 95%,rgba(34,225,211,.16),transparent 60%),
+   linear-gradient(180deg,var(--space),var(--navy) 120%);
+}
+#progress{position:fixed;top:0;right:0;height:3px;width:0;z-index:100;
+  background:linear-gradient(270deg,var(--turq),var(--blue),var(--gold));box-shadow:0 0 12px var(--turq)}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;padding:12px 0;
+  background:linear-gradient(180deg,rgba(4,6,15,.85),rgba(4,6,15,.4));backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.35rem}
+.logo i{font-style:normal;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--blue),var(--turq));box-shadow:0 0 24px rgba(34,225,211,.45);font-size:1.25rem}
+.logo span{background:linear-gradient(90deg,#fff,var(--turq));-webkit-background-clip:text;background-clip:text;color:transparent}
+.links{display:flex;align-items:center;gap:6px}
+.links a,.links button{padding:8px 16px;border-radius:12px;font-size:.95rem;color:var(--muted);background:transparent;transition:.25s}
+.links a:hover,.links a.on{color:#fff;background:var(--glass)}
+.links .cta{background:linear-gradient(135deg,var(--blue),var(--turq));color:#04101f;font-weight:700}
+.links .cta:hover{filter:brightness(1.1);transform:translateY(-1px);color:#04101f}
+.burger{display:none;width:42px;height:42px;border-radius:12px;background:var(--glass);font-size:1.2rem}
+
+/* HERO */
+.hero{position:relative;padding:70px 0 40px;text-align:center;overflow:hidden}
+.orbit{position:absolute;left:50%;top:48%;width:760px;height:760px;transform:translate(-50%,-50%);z-index:-1;opacity:.75;pointer-events:none}
+.orbit .ring{position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(120,170,255,.22);animation:spin 60s linear infinite}
+.orbit .ring:nth-child(2){inset:90px;animation-duration:40s;animation-direction:reverse;border-color:rgba(34,225,211,.25)}
+.orbit .ring:nth-child(3){inset:190px;animation-duration:26s;border-color:rgba(245,197,66,.25)}
+.orbit .ring b{position:absolute;top:-8px;left:50%;width:16px;height:16px;border-radius:50%;
+  background:var(--blue);box-shadow:0 0 22px 4px var(--blue)}
+.orbit .ring:nth-child(2) b{background:var(--turq);box-shadow:0 0 22px 4px var(--turq)}
+.orbit .ring:nth-child(3) b{background:var(--gold);box-shadow:0 0 22px 4px var(--gold);width:12px;height:12px}
+.orbit .core{position:absolute;inset:300px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#7fe8ff,var(--blue) 45%,#0b2a7a 100%);
+  box-shadow:0 0 90px 20px rgba(47,123,255,.4),inset -30px -20px 60px rgba(0,0,0,.5);animation:float 7s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{50%{transform:translateY(-14px)}}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:7px 18px;border-radius:99px;font-size:.88rem;
+  background:var(--glass);border:1px solid var(--line);color:var(--turq);margin-bottom:22px}
+.badge:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--turq);box-shadow:0 0 12px var(--turq);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35;transform:scale(.7)}}
+.hero h1{font-size:clamp(2.6rem,8vw,5.6rem);font-weight:900;line-height:1.25;letter-spacing:-1px;
+  background:linear-gradient(100deg,#fff 10%,var(--turq) 40%,var(--blue) 65%,var(--gold) 95%);background-size:220% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 7s linear infinite;
+  text-shadow:0 0 60px rgba(47,123,255,.25)}
+@keyframes shine{to{background-position:-220% center}}
+.hero p.sub{font-size:clamp(1rem,2.4vw,1.35rem);color:var(--muted);max-width:640px;margin:14px auto 30px}
+.search{max-width:620px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 18px;border-radius:99px}
+.search:focus-within{border-color:var(--turq);box-shadow:0 0 0 4px rgba(34,225,211,.14)}
+.search input{flex:1;background:none;border:0;outline:0;font-size:1.05rem;padding:10px 6px}
+.search input::placeholder{color:#7384ad}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 24px;border-radius:99px;font-weight:700;
+  background:linear-gradient(135deg,var(--blue),var(--turq));color:#04101f;transition:.25s;font-size:.95rem}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(34,225,211,.3)}
+.btn.ghost{background:var(--glass);color:var(--white);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--turq);box-shadow:none}
+.btn.danger{background:rgba(255,92,122,.15);color:var(--danger);border:1px solid rgba(255,92,122,.4)}
+.btn.sm{padding:6px 14px;font-size:.82rem}
+.stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:44px}
+.stat{padding:16px 30px;min-width:150px}
+.stat b{display:block;font-size:2rem;font-weight:900;line-height:1.3;background:linear-gradient(90deg,var(--turq),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{color:var(--muted);font-size:.9rem}
+
+/* SECTIONS */
+section{padding:34px 0}
+.sec-head{display:flex;align-items:end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.sec-head h2{font-size:1.7rem;font-weight:800}
+.sec-head h2:after{content:"";display:block;width:56px;height:4px;border-radius:4px;margin-top:6px;background:linear-gradient(90deg,var(--turq),var(--blue))}
+.sec-head p{color:var(--muted);font-size:.95rem}
+
+.fact{position:relative;padding:28px 32px;display:flex;gap:22px;align-items:center;overflow:hidden;
+  background:linear-gradient(120deg,rgba(47,123,255,.18),rgba(34,225,211,.08))}
+.fact .emo{font-size:3rem;filter:drop-shadow(0 0 18px rgba(245,197,66,.6))}
+.fact h3{color:var(--gold);font-size:.95rem;font-weight:700;margin-bottom:4px}
+.fact p{font-size:1.1rem}
+.fact .btn{margin-right:auto;white-space:nowrap}
+
+.featured{display:grid;grid-template-columns:1.15fr 1fr;overflow:hidden;min-height:340px;transition:.3s}
+.featured:hover{border-color:rgba(34,225,211,.5);box-shadow:0 20px 60px rgba(47,123,255,.2)}
+.featured .cover{position:relative;min-height:260px}
+.featured .body{padding:34px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.featured h3{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;line-height:1.5}
+.featured p{color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:99px;font-size:.8rem;font-weight:700;
+  background:rgba(255,255,255,.08);border:1px solid var(--line);width:fit-content}
+.pill.gold{color:var(--gold);border-color:rgba(245,197,66,.4);background:rgba(245,197,66,.1)}
+
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.chip{padding:9px 20px;border-radius:99px;background:var(--glass);border:1px solid var(--line);font-size:.92rem;color:var(--muted);transition:.25s}
+.chip:hover{color:#fff;border-color:var(--turq)}
+.chip.on{background:linear-gradient(135deg,var(--blue),var(--turq));color:#04101f;font-weight:700;border-color:transparent}
+.sort{background:var(--glass);border:1px solid var(--line);border-radius:12px;padding:8px 14px;outline:0}
+.sort option{background:var(--navy)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:22px}
+.card{position:relative;overflow:hidden;display:flex;flex-direction:column;transition:transform .25s,border-color .25s,box-shadow .25s;
+  transform:perspective(900px) rotateX(var(--rx,0)) rotateY(var(--ry,0));will-change:transform}
+.card:hover{border-color:rgba(34,225,211,.55);box-shadow:0 22px 50px rgba(0,0,0,.45),0 0 40px rgba(47,123,255,.18)}
+.card .cover{position:relative;aspect-ratio:16/10}
+.cover{overflow:hidden}
+.cover img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.card:hover .cover img,.featured:hover .cover img{transform:scale(1.07)}
+.cover .ph{width:100%;height:100%;display:grid;place-items:center;font-size:4.2rem;position:relative}
+.cover .ph:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 20%,rgba(255,255,255,.22),transparent 55%)}
+.cover:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(4,6,15,.75))}
+.cover .tag{position:absolute;top:14px;right:14px;z-index:2}
+.card .body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card h3{font-size:1.15rem;font-weight:800;line-height:1.7}
+.card p{color:var(--muted);font-size:.92rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.meta{display:flex;gap:14px;flex-wrap:wrap;color:#7f90b8;font-size:.8rem;margin-top:auto;padding-top:8px}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .big{font-size:3.4rem}
+
+/* ARTICLE */
+.article{max-width:820px;margin:0 auto;padding:30px 20px 60px}
+.back{display:inline-flex;gap:8px;color:var(--muted);margin-bottom:20px;transition:.2s}
+.back:hover{color:var(--turq);transform:translateX(4px)}
+.a-cover{border-radius:26px;overflow:hidden;aspect-ratio:16/8.5;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.a-cover .ph{font-size:6rem}
+.article h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:900;line-height:1.55;margin:26px 0 12px}
+.a-meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:.9rem;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:26px}
+.lead{font-size:1.2rem;color:#cfe0ff;border-right:4px solid var(--turq);padding:6px 18px;margin-bottom:28px;background:linear-gradient(270deg,rgba(34,225,211,.08),transparent)}
+.prose{font-size:1.1rem;line-height:2.15;color:#e3ecff}
+.prose p{margin-bottom:18px}
+.prose h2{font-size:1.6rem;font-weight:800;margin:34px 0 12px;color:#fff}
+.prose h2:before{content:"✦ ";color:var(--gold)}
+.prose h3{font-size:1.3rem;font-weight:700;margin:26px 0 10px;color:var(--turq)}
+.prose ul{margin:0 24px 18px 0}.prose li{margin-bottom:6px}
+.prose img{border-radius:16px;margin:22px auto;border:1px solid var(--line)}
+.prose strong{color:var(--gold)}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin:34px 0;padding:18px;align-items:center}
+.like.on{background:rgba(255,92,138,.18);border-color:#ff5c8a;color:#ff8fb0}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tags span{font-size:.82rem;padding:3px 12px;border-radius:99px;background:rgba(47,123,255,.15);color:#9ec1ff}
+
+.comments{margin:34px 0;padding:24px}
+.comments h2{font-size:1.5rem;margin-bottom:6px}
+.comments-intro{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+.comment-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 26px}
+.comment-form .wide{grid-column:1/-1}
+.comment-list{display:grid;gap:12px}
+.comment-item{padding:16px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.035)}
+.comment-item p{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:6px;color:#dce8ff}
+.comment-item small{color:var(--muted)}
+.comment-empty{color:var(--muted);padding:14px;text-align:center}
+@media(max-width:600px){.comment-form{grid-template-columns:1fr}.comment-form .wide{grid-column:auto}.comments{padding:16px}}
+
+/* FOOTER */
+footer{margin-top:50px;border-top:1px solid var(--line);background:linear-gradient(180deg,transparent,rgba(10,19,48,.8))}
+.rubika{margin:40px auto;padding:34px;text-align:center;background:linear-gradient(120deg,rgba(47,123,255,.2),rgba(34,225,211,.1),rgba(245,197,66,.1))}
+.rubika h3{font-size:1.6rem;font-weight:900;margin-bottom:6px}
+.rubika p{color:var(--muted);margin-bottom:18px}
+.copy{text-align:center;padding:20px;color:#6e7fa8;font-size:.88rem}
+
+/* FORMS / ADMIN */
+.login{max-width:430px;margin:50px auto;padding:36px}
+.login h2{font-size:1.6rem;font-weight:900;margin-bottom:4px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-size:.88rem;color:var(--muted);font-weight:500}
+.in{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:12px 16px;outline:0;font-size:1rem;transition:.2s}
+.in:focus{border-color:var(--turq);box-shadow:0 0 0 4px rgba(34,225,211,.12)}
+select.in option{background:var(--navy)}
+textarea.in{resize:vertical;min-height:110px;line-height:1.9}
+.dir-ltr{direction:ltr;text-align:left}
+.dash-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin:26px 0}
+.dash-head h2{font-size:1.7rem;font-weight:900}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:26px}
+.sc{padding:20px}.sc b{display:block;font-size:2rem;font-weight:900}.sc span{color:var(--muted);font-size:.88rem}
+.sc.a b{color:var(--turq)}.sc.b b{color:var(--blue)}.sc.c b{color:var(--gold)}.sc.d b{color:#ff8fb0}.sc.e b{color:var(--ok)}
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl-wrap{overflow-x:auto;padding:6px}
+.tbl th{font-size:.82rem;color:var(--muted);text-align:right;padding:12px 14px;font-weight:500;border-bottom:1px solid var(--line)}
+.tbl td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.05);font-size:.93rem;vertical-align:middle}
+.tbl tr:hover td{background:rgba(255,255,255,.03)}
+.st{padding:3px 12px;border-radius:99px;font-size:.78rem;font-weight:700}
+.st.p{background:rgba(74,222,128,.15);color:var(--ok)}.st.d{background:rgba(245,197,66,.15);color:var(--gold)}
+.row-act{display:flex;gap:6px;flex-wrap:wrap}
+.editor{display:grid;grid-template-columns:1fr 330px;gap:20px;align-items:start}
+.editor .panel{padding:22px}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.toolbar button{padding:5px 12px;border-radius:9px;background:var(--glass);border:1px solid var(--line);font-size:.85rem}
+.toolbar button:hover{border-color:var(--turq)}
+.cover-prev{aspect-ratio:16/10;border-radius:14px;background:rgba(255,255,255,.05);border:1px dashed var(--line);overflow:hidden;display:grid;place-items:center;color:var(--muted);margin-bottom:12px}
+.cover-prev img{width:100%;height:100%;object-fit:cover}
+.switch{display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer}
+.switch input{accent-color:var(--turq);width:18px;height:18px}
+.notice{padding:26px;margin:40px auto;max-width:720px;border-color:rgba(245,197,66,.4);background:rgba(245,197,66,.07)}
+.notice h3{color:var(--gold);margin-bottom:8px}
+.notice code{background:rgba(0,0,0,.4);padding:2px 8px;border-radius:6px;direction:ltr;display:inline-block;font-size:.85rem}
+.skel{height:300px;border-radius:var(--r);background:linear-gradient(100deg,rgba(255,255,255,.04) 30%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.04) 70%);background-size:200% 100%;animation:sk 1.4s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);z-index:200;padding:12px 24px;border-radius:14px;
+  background:var(--navy2);border:1px solid var(--turq);box-shadow:0 10px 40px rgba(0,0,0,.5);transition:.35s;max-width:90vw}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.err{border-color:var(--danger)}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.in-view{opacity:1;transform:none}
+
+@media(max-width:860px){
+  .featured{grid-template-columns:1fr}
+  .editor{grid-template-columns:1fr}
+  .fact{flex-direction:column;text-align:center}.fact .btn{margin:0}
+  .burger{display:block}
+  .links{position:absolute;top:100%;right:0;left:0;flex-direction:column;align-items:stretch;padding:14px 20px;
+    background:rgba(4,6,15,.96);border-bottom:1px solid var(--line);display:none}
+  .links.open{display:flex}
+  .orbit{width:520px;height:520px}.orbit .core{inset:200px}.orbit .ring:nth-child(2){inset:60px}.orbit .ring:nth-child(3){inset:125px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="nebula"></div>
+<div id="progress"></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#/"><i>✨</i><span>شگفتی‌دان</span></a>
+    <button class="burger" id="burger" aria-label="منو">☰</button>
+    <nav class="links" id="links">
+      <a href="#/" data-nav="home">صفحه اصلی</a>
+      <a href="#/" data-goto="explore">شگفتی‌ها</a>
+      <a class="cta" href="https://rubika.ir/ShegeftiDan" target="_blank" rel="noopener">📢 کانال روبیکا</a>
+      <a href="#/admin" data-nav="admin">پنل مدیریت</a>
+    </nav>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="glass rubika">
+      <h3>دنیا را متفاوت ببین! 🚀</h3>
+      <p>هر روز یک شگفتی تازه در کانال روبیکای شگفتی‌دان</p>
+      <a class="btn" href="https://rubika.ir/ShegeftiDan" target="_blank" rel="noopener">عضویت در کانال روبیکا</a>
+    </div>
+    <div class="copy">© تمامی حقوق برای سایت شگفتی‌دان محفوظ است.</div>
+  </div>
+</footer>
+<div id="toast"></div>
+<noscript><div style="padding:30px;text-align:center">برای مشاهده این سایت جاوااسکریپت را فعال کنید.</div></noscript>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ============================================================
+   تنظیمات — این دو مقدار را از Supabase بردارید:
+   Project Settings → API  (Project URL  و  anon / publishable key)
+   ============================================================ */
+const CONFIG = {
+  SUPABASE_URL: 'https://gkowvobmhxjyynwuygwm.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_LUh1JlXs90v2JLJFzSuuyQ_bdJ0dm_x',
+  RUBIKA: 'https://rubika.ir/ShegeftiDan',
+  IMAGE_UPLOAD_FUNCTION: 'github-image-upload'
+};
+
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fa = n => Number(n || 0).toLocaleString('fa-IR');
+const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
+const fmtDate = d => d ? new Intl.DateTimeFormat('fa-IR', {dateStyle:'medium'}).format(new Date(d)) : '';
+const app = $('#app');
+let toastT;
+function toast(msg, err) {
+  const t = $('#toast'); t.textContent = msg; t.className = 'show' + (err ? ' err' : '');
+  clearTimeout(toastT); toastT = setTimeout(() => t.className = '', 3200);
+}
+const configured = !/YOUR_/.test(CONFIG.SUPABASE_URL + CONFIG.SUPABASE_ANON_KEY);
+const sb = (configured && window.supabase) ? window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY) : null;
+
+/* ---------- content renderer (safe mini-markdown) ---------- */
+function md(text) {
+  const inline = s => esc(s)
+    .replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, '<img loading="lazy" alt="$1" src="$2">')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+  return String(text || '').replace(/\r/g, '').split(/\n{2,}/).map(b => {
+    b = b.trim(); if (!b) return '';
+    if (b.startsWith('### ')) return '<h3>' + inline(b.slice(4)) + '</h3>';
+    if (b.startsWith('## ')) return '<h2>' + inline(b.slice(3)) + '</h2>';
+    if (/^- /.test(b)) return '<ul>' + b.split('\n').map(l => '<li>' + inline(l.replace(/^- /, '')) + '</li>').join('') + '</ul>';
+    return '<p>' + inline(b) + '</p>';
+  }).join('');
+}
+
+/* ---------- starfield ---------- */
+(function stars() {
+  const c = $('#stars'), x = c.getContext('2d');
+  let w, h, S = [], shoot = null, mx = 0, my = 0;
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function size() {
+    w = c.width = innerWidth; h = c.height = innerHeight;
+    S = Array.from({length: Math.min(220, Math.floor(w * h / 7000))}, () => ({
+      x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.5 + .2,
+      d: Math.random() * .8 + .2, p: Math.random() * 6.28, hue: Math.random() < .2 ? 180 : (Math.random() < .3 ? 45 : 220)
+    }));
+  }
+  addEventListener('resize', size); size();
+  addEventListener('mousemove', e => { mx = (e.clientX / w - .5); my = (e.clientY / h - .5); });
+  function draw(t) {
+    x.clearRect(0, 0, w, h);
+    for (const s of S) {
+      const tw = .55 + .45 * Math.sin(t / 900 * s.d + s.p);
+      x.beginPath();
+      x.arc(s.x + mx * 22 * s.d, (s.y + t * .004 * s.d) % h + my * 22 * s.d, s.r, 0, 6.283);
+      x.fillStyle = `hsla(${s.hue},90%,85%,${tw})`; x.fill();
+    }
+    if (!shoot && Math.random() < .004) shoot = {x: Math.random() * w, y: Math.random() * h * .4, l: 0};
+    if (shoot) {
+      const g = x.createLinearGradient(shoot.x, shoot.y, shoot.x - 140, shoot.y - 70);
+      g.addColorStop(0, 'rgba(255,255,255,.95)'); g.addColorStop(1, 'transparent');
+      x.strokeStyle = g; x.lineWidth = 2; x.beginPath();
+      x.moveTo(shoot.x, shoot.y); x.lineTo(shoot.x - 140, shoot.y - 70); x.stroke();
+      shoot.x += 14; shoot.y += 7; shoot.l++;
+      if (shoot.l > 70) shoot = null;
+    }
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+/* ---------- state ---------- */
+let CATS = [], ARTS = [], filter = {q: '', cat: 'all', sort: 'new'};
+const catOf = slug => CATS.find(c => c.slug === slug) || {slug, name: slug, icon: '✨', color: '#2f7bff'};
+const LIST_COLS = 'id,slug,title,summary,category,tags,cover_url,featured,views,likes,read_minutes,published_at';
+
+async function loadPublic() {
+  const [c, a] = await Promise.all([
+    sb.from('sg_categories').select('*').order('sort'),
+    sb.from('sg_articles').select(LIST_COLS).eq('status', 'published').order('published_at', {ascending: false})
+  ]);
+  if (c.error) throw c.error; if (a.error) throw a.error;
+  CATS = c.data; ARTS = a.data;
+}
+
+/* ---------- UI bits ---------- */
+function coverHTML(a, big) {
+  const cat = catOf(a.category), u = safeUrl(a.cover_url);
+  const inner = u ? `<img loading="lazy" src="${esc(u)}" alt="${esc(a.title)}">`
+    : `<div class="ph" style="background:linear-gradient(135deg,${esc(cat.color)}44,#0a1330 70%)">${esc(cat.icon)}</div>`;
+  return `<div class="cover${big ? ' a-cover' : ''}">${inner}${big ? '' : `<span class="pill tag">${esc(cat.icon)} ${esc(cat.name)}</span>`}</div>`;
+}
+function cardHTML(a) {
+  return `<a class="glass card reveal" href="#/a/${esc(a.slug)}">
+    ${coverHTML(a)}
+    <div class="body"><h3>${esc(a.title)}</h3><p>${esc(a.summary)}</p>
+    <div class="meta"><span>👁 ${fa(a.views)}</span><span>❤️ ${fa(a.likes)}</span><span>⏱ ${fa(a.read_minutes)} دقیقه</span><span>${fmtDate(a.published_at)}</span></div></div></a>`;
+}
+function observe() {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } }), {threshold: .08});
+  $$('.reveal:not(.in-view)').forEach(el => io.observe(el));
+  $$('.card').forEach(c => {
+    c.addEventListener('mousemove', e => {
+      const r = c.getBoundingClientRect();
+      c.style.setProperty('--ry', ((e.clientX - r.left) / r.width - .5) * 6 + 'deg');
+      c.style.setProperty('--rx', ((e.clientY - r.top) / r.height - .5) * -6 + 'deg');
+    });
+    c.addEventListener('mouseleave', () => { c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); });
+  });
+}
+function countUp(el, to) {
+  const t0 = performance.now();
+  (function f(t) { const p = Math.min(1, (t - t0) / 1200); el.textContent = fa(Math.round(to * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(f); })(t0);
+}
+function setupNotice() {
+  app.innerHTML = `<div class="wrap"><div class="glass notice"><h3>⚙️ اتصال به Supabase تنظیم نشده</h3>
+  <p>در ابتدای بخش اسکریپت فایل <code>index.html</code> مقدار <code>SUPABASE_URL</code> و <code>SUPABASE_ANON_KEY</code> را وارد کنید (Project Settings → API). سپس فایل <code>supabase.sql</code> را یک‌بار در SQL Editor اجرا کنید تا جدول‌ها، دسته‌بندی‌ها و سه مقاله اولیه ساخته شوند.</p></div></div>`;
+}
+function dbError(e) {
+  app.innerHTML = `<div class="wrap"><div class="glass notice"><h3>خطا در ارتباط با پایگاه داده</h3>
+  <p>${esc(e.message || e)}</p><p style="margin-top:8px;color:var(--muted)">مطمئن شوید فایل <code>supabase.sql</code> اجرا شده و URL و کلید درست‌اند.</p></div></div>`;
+}
+
+/* ============================== HOME ============================== */
+async function renderHome() {
+  document.title = 'شگفتی‌دان | دنیا را متفاوت ببین!';
+  if (!sb) return setupNotice();
+  app.innerHTML = `<div class="wrap"><div class="skel" style="margin:60px 0"></div><div class="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div></div>`;
+  filter = {q: '', cat: 'all', sort: 'new'};
+  try { await loadPublic(); } catch (e) { return dbError(e); }
+
+  const totalViews = ARTS.reduce((s, a) => s + a.views, 0);
+  app.innerHTML = `
+  <section class="hero"><div class="orbit"><div class="ring"><b></b></div><div class="ring"><b></b></div><div class="ring"><b></b></div><div class="core"></div></div>
+    <div class="wrap">
+      <span class="badge">دانشنامه شگفتی‌های جهان</span>
+      <h1>شگفتی‌دان</h1>
+      <p class="sub">دنیا را متفاوت ببین! جذاب‌ترین مطالب علمی، نجوم، طبیعت، تاریخ و فناوری در فضایی مدرن</p>
+      <div class="glass search"><span>🔍</span><input id="q" placeholder="جستجو در شگفتی‌ها…" autocomplete="off"><button class="btn" id="go">بگرد</button></div>
+      <div class="stats">
+        <div class="glass stat"><b data-n="${ARTS.length}">۰</b><span>مقاله منتشر شده</span></div>
+        <div class="glass stat"><b data-n="${CATS.length}">۰</b><span>دسته‌بندی</span></div>
+        <div class="glass stat"><b data-n="${totalViews}">۰</b><span>بازدید</span></div>
+      </div>
+    </div></section>
+  <div class="wrap">
+    <section id="factbox"></section>
+    <section id="featbox"></section>
+    <section id="explore">
+      <div class="sec-head"><div><h2>تازه‌ترین شگفتی‌ها</h2><p>مقاله‌ها را بر اساس دسته‌بندی فیلتر یا جستجو کنید</p></div>
+        <select class="sort" id="sort"><option value="new">جدیدترین</option><option value="views">پربازدیدترین</option><option value="likes">محبوب‌ترین</option></select></div>
+      <div class="chips" id="chips"></div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </div>`;
+
+  $$('.stat b').forEach(b => countUp(b, +b.dataset.n));
+  drawFact(); drawFeatured(); drawChips(); drawGrid();
+
+  const q = $('#q');
+  q.addEventListener('input', () => { filter.q = q.value; drawGrid(); });
+  q.addEventListener('keydown', e => { if (e.key === 'Enter') $('#explore').scrollIntoView({behavior: 'smooth'}); });
+  $('#go').addEventListener('click', () => $('#explore').scrollIntoView({behavior: 'smooth'}));
+  $('#sort').addEventListener('change', e => { filter.sort = e.target.value; drawGrid(); });
+}
+function drawFact() {
+  const box = $('#factbox'); if (!box || !ARTS.length) return box && (box.innerHTML = '');
+  const a = ARTS[Math.floor(Math.random() * ARTS.length)], cat = catOf(a.category);
+  box.innerHTML = `<div class="glass fact reveal"><div class="emo">${esc(cat.icon)}</div>
+    <div><h3>💡 آیا می‌دانستید؟</h3><p>${esc(a.summary)}</p></div>
+    <div style="display:flex;gap:8px;margin-right:auto;flex-wrap:wrap"><a class="btn sm" href="#/a/${esc(a.slug)}">ادامه مطلب</a><button class="btn ghost sm" id="nextfact">شگفتی دیگر 🎲</button></div></div>`;
+  $('#nextfact').addEventListener('click', drawFact); observe();
+}
+function drawFeatured() {
+  const box = $('#featbox'); if (!box) return;
+  const a = ARTS.find(x => x.featured) || ARTS[0];
+  if (!a) return box.innerHTML = '';
+  box.innerHTML = `<a class="glass featured reveal" href="#/a/${esc(a.slug)}">${coverHTML(a)}
+    <div class="body"><span class="pill gold">⭐ مقاله ویژه</span><h3>${esc(a.title)}</h3><p>${esc(a.summary)}</p>
+    <div class="meta"><span>👁 ${fa(a.views)}</span><span>⏱ ${fa(a.read_minutes)} دقیقه مطالعه</span></div>
+    <span class="btn" style="width:fit-content;margin-top:8px">خواندن مقاله ←</span></div></a>`;
+  observe();
+}
+function drawChips() {
+  const el = $('#chips'); if (!el) return;
+  el.innerHTML = `<button class="chip ${filter.cat === 'all' ? 'on' : ''}" data-c="all">همه</button>` +
+    CATS.map(c => `<button class="chip ${filter.cat === c.slug ? 'on' : ''}" data-c="${esc(c.slug)}">${esc(c.icon)} ${esc(c.name)}</button>`).join('');
+  $$('.chip', el).forEach(b => b.addEventListener('click', () => { filter.cat = b.dataset.c; drawChips(); drawGrid(); }));
+}
+function drawGrid() {
+  const g = $('#grid'); if (!g) return;
+  const q = filter.q.trim().toLowerCase();
+  let list = ARTS.filter(a => (filter.cat === 'all' || a.category === filter.cat) &&
+    (!q || (a.title + ' ' + a.summary + ' ' + (a.tags || []).join(' ')).toLowerCase().includes(q)));
+  if (filter.sort === 'views') list = [...list].sort((a, b) => b.views - a.views);
+  if (filter.sort === 'likes') list = [...list].sort((a, b) => b.likes - a.likes);
+  g.innerHTML = list.length ? list.map(cardHTML).join('') :
+    `<div class="empty" style="grid-column:1/-1"><div class="big">🔭</div><p>چیزی پیدا نشد. عبارت دیگری را امتحان کنید.</p></div>`;
+  observe();
+}
+
+/* ============================== ARTICLE ============================== */
+async function renderArticle(slug) {
+  if (!sb) return setupNotice();
+  app.innerHTML = `<div class="article"><div class="skel"></div></div>`;
+  if (!CATS.length) { try { await loadPublic(); } catch (e) { return dbError(e); } }
+  const {data: a, error} = await sb.from('sg_articles').select('*').eq('slug', slug).eq('status', 'published').maybeSingle();
+  if (error) return dbError(error);
+  if (!a) { app.innerHTML = `<div class="wrap"><div class="empty"><div class="big">🛸</div><h2>این مقاله پیدا نشد</h2><br><a class="btn" href="#/">بازگشت به صفحه اصلی</a></div></div>`; return; }
+  document.title = a.title + ' | شگفتی‌دان';
+  const cat = catOf(a.category), liked = localStorage.getItem('sg_like_' + a.id) === '1';
+  const related = ARTS.filter(x => x.category === a.category && x.id !== a.id).slice(0, 3);
+  app.innerHTML = `<article class="article">
+    <a class="back" href="#/">→ بازگشت به صفحه اصلی</a>
+    ${coverHTML(a, true)}
+    <span class="pill" style="margin-top:22px">${esc(cat.icon)} ${esc(cat.name)}</span>
+    <h1>${esc(a.title)}</h1>
+    <div class="a-meta"><span>📅 ${fmtDate(a.published_at)}</span><span>⏱ ${fa(a.read_minutes)} دقیقه مطالعه</span><span>👁 <b id="vcount">${fa(a.views)}</b> بازدید</span></div>
+    ${a.summary ? `<p class="lead">${esc(a.summary)}</p>` : ''}
+    <div class="prose" id="prose">${md(a.content)}</div>
+    <div class="glass actions">
+      <button class="btn ghost like ${liked ? 'on' : ''}" id="like">${liked ? '❤️' : '🤍'} <span id="lcount">${fa(a.likes)}</span></button>
+      <button class="btn ghost" id="share">🔗 اشتراک‌گذاری</button>
+      <a class="btn" href="${esc(CONFIG.RUBIKA)}" target="_blank" rel="noopener">📢 کانال روبیکا</a>
+      <div class="tags" style="margin-right:auto">${(a.tags || []).map(t => `<span>#${esc(t)}</span>`).join('')}</div>
+    </div>
+    <section class="glass comments" id="comments">
+      <h2>💬 دیدگاه‌ها</h2>
+      <p class="comments-intro">نظرت را درباره این شگفتی بنویس. دیدگاه‌ها پس از بررسی منتشر می‌شوند.</p>
+      <form id="commentForm" class="comment-form">
+        <input class="in" id="commentName" maxlength="40" minlength="2" required placeholder="نام شما">
+        <input class="in" id="commentWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px" placeholder="وب‌سایت">
+        <textarea class="in wide" id="commentBody" maxlength="1200" minlength="3" required rows="4" placeholder="دیدگاه شما..."></textarea>
+        <button class="btn wide" id="commentSubmit">ارسال دیدگاه</button>
+      </form>
+      <div class="comment-list" id="commentList"><div class="comment-empty">در حال دریافت دیدگاه‌ها…</div></div>
+    </section>
+    ${related.length ? `<div class="sec-head"><h2>مطالب مرتبط</h2></div><div class="grid">${related.map(cardHTML).join('')}</div>` : ''}
+  </article>`;
+  observe();
+
+  // view counter: once per tab session
+  if (!sessionStorage.getItem('sg_v_' + a.id)) {
+    sessionStorage.setItem('sg_v_' + a.id, '1');
+    sb.rpc('sg_add_view', {p_id: a.id}).then(({error}) => { if (!error) $('#vcount').textContent = fa(a.views + 1); });
+  }
+  $('#like').addEventListener('click', async () => {
+    const on = localStorage.getItem('sg_like_' + a.id) === '1', d = on ? -1 : 1;
+    const {data, error} = await sb.rpc('sg_like', {p_id: a.id, p_delta: d});
+    if (error) return toast('ثبت پسند ناموفق بود', true);
+    on ? localStorage.removeItem('sg_like_' + a.id) : localStorage.setItem('sg_like_' + a.id, '1');
+    $('#lcount').textContent = fa(data);
+    $('#like').classList.toggle('on', !on); $('#like').firstChild.textContent = on ? '🤍 ' : '❤️ ';
+  });
+  $('#share').addEventListener('click', async () => {
+    const url = location.href;
+    if (navigator.share) { try { await navigator.share({title: a.title, url}); return; } catch (_) {} }
+    try { await navigator.clipboard.writeText(url); toast('لینک کپی شد ✅'); } catch (_) { toast(url); }
+  });
+  await loadArticleComments(a.id);
+  $('#commentForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = $('#commentName').value.trim(), body = $('#commentBody').value.trim();
+    if ($('#commentWebsite').value) return;
+    if (name.length < 2 || body.length < 3 || body.length > 1200) return toast('نام یا متن دیدگاه معتبر نیست', true);
+    const last = Number(localStorage.getItem('sg_comment_last') || 0);
+    if (Date.now() - last < 45000) return toast('برای ارسال دیدگاه بعدی کمی صبر کن', true);
+    const button = $('#commentSubmit'); button.disabled = true; button.textContent = 'در حال ارسال…';
+    const {error} = await sb.from('sg_comments').insert({article_id:a.id, author_name:name, body, status:'pending'});
+    button.disabled = false; button.textContent = 'ارسال دیدگاه';
+    if (error) return toast('ارسال دیدگاه انجام نشد: ' + error.message, true);
+    localStorage.setItem('sg_comment_last', String(Date.now()));
+    $('#commentBody').value = '';
+    toast('دیدگاهت ثبت شد و پس از بررسی نمایش داده می‌شود ✅');
+  });
+}
+
+async function loadArticleComments(articleId) {
+  const box = $('#commentList'); if (!box) return;
+  const {data, error} = await sb.from('sg_comments').select('id,author_name,body,created_at')
+    .eq('article_id', articleId).eq('status', 'approved').order('created_at', {ascending:false}).limit(50);
+  if (error) { box.innerHTML = '<div class="comment-empty">دریافت دیدگاه‌ها فعلاً ممکن نیست.</div>'; return; }
+  box.innerHTML = data.length ? data.map(c => `<div class="comment-item"><b>${esc(c.author_name)}</b><small> · ${fmtDate(c.created_at)}</small><p>${esc(c.body)}</p></div>`).join('')
+    : '<div class="comment-empty">هنوز دیدگاه تأییدشده‌ای ثبت نشده است. اولین نفر باش!</div>';
+}
+
+/* ============================== ADMIN ============================== */
+let adminTab = 'articles';
+async function renderAdmin(sub) {
+  document.title = 'پنل مدیریت | شگفتی‌دان';
+  if (!sb) return setupNotice();
+  const {data: {session}} = await sb.auth.getSession();
+  if (!session) return renderLogin();
+  const {data: adm, error} = await sb.from('sg_admins').select('user_id').eq('user_id', session.user.id).maybeSingle();
+  if (error) return dbError(error);
+  if (!adm) {
+    app.innerHTML = `<div class="wrap"><div class="glass notice"><h3>دسترسی مدیر ندارید</h3>
+    <p>این حساب (${esc(session.user.email)}) در لیست مدیران نیست. دستور SQL انتهای فایل <code>supabase.sql</code> را برای ایمیل خود اجرا کنید.</p>
+    <br><button class="btn ghost" id="lo">خروج</button></div></div>`;
+    $('#lo').onclick = async () => { await sb.auth.signOut(); renderAdmin(); };
+    return;
+  }
+  if (sub && sub[0] === 'new') return renderEditor(null);
+  if (sub && sub[0] === 'edit') return renderEditor(sub[1]);
+  renderDashboard(session.user);
+}
+function renderLogin() {
+  app.innerHTML = `<div class="wrap"><form class="glass login" id="lf">
+    <h2>ورود به پنل مدیریت</h2><p style="color:var(--muted);margin-bottom:22px">برای انتشار و مدیریت مقالات وارد شوید</p>
+    <div class="field"><label>ایمیل</label><input class="in dir-ltr" type="email" id="em" required autocomplete="username"></div>
+    <div class="field"><label>رمز عبور</label><input class="in dir-ltr" type="password" id="pw" required autocomplete="current-password"></div>
+    <button class="btn" style="width:100%" id="lb">ورود به داشبورد</button></form></div>`;
+  $('#lf').addEventListener('submit', async e => {
+    e.preventDefault(); const b = $('#lb'); b.disabled = true; b.textContent = 'در حال ورود…';
+    const {error} = await sb.auth.signInWithPassword({email: $('#em').value.trim(), password: $('#pw').value});
+    if (error) { toast('ایمیل یا رمز عبور اشتباه است', true); b.disabled = false; b.textContent = 'ورود به داشبورد'; return; }
+    renderAdmin();
+  });
+}
+async function renderDashboard(user) {
+  app.innerHTML = `<div class="wrap"><div class="skel" style="margin:30px 0"></div></div>`;
+  const [a, c, cm] = await Promise.all([
+    sb.from('sg_articles').select('id,slug,title,category,status,featured,views,likes,updated_at,published_at').order('updated_at', {ascending: false}),
+    sb.from('sg_categories').select('*').order('sort'),
+    sb.from('sg_comments').select('id,author_name,body,status,created_at,article_id,sg_articles(title)').order('created_at', {ascending:false}).limit(200)
+  ]);
+  if (a.error) return dbError(a.error); if (c.error) return dbError(c.error); if (cm.error) return dbError(cm.error);
+  CATS = c.data; const L = a.data; const comments = cm.data || []; const pendingComments = comments.filter(x => x.status === 'pending').length;
+  const pub = L.filter(x => x.status === 'published').length;
+  app.innerHTML = `<div class="wrap">
+    <div class="dash-head"><div><h2>مدیریت محتوای سایت</h2><p style="color:var(--muted)">${esc(user.email)}</p></div>
+      <div style="display:flex;gap:10px"><a class="btn" href="#/admin/new">✍️ مقاله جدید</a><button class="btn ghost" id="lo">خروج از حساب</button></div></div>
+    <div class="cards">
+      <div class="glass sc a"><b>${fa(L.length)}</b><span>کل مقالات</span></div>
+      <div class="glass sc e"><b>${fa(pub)}</b><span>منتشر شده</span></div>
+      <div class="glass sc c"><b>${fa(L.length - pub)}</b><span>پیش‌نویس</span></div>
+      <div class="glass sc b"><b>${fa(L.reduce((s, x) => s + x.views, 0))}</b><span>مجموع بازدید</span></div>
+      <div class="glass sc d"><b>${fa(L.reduce((s, x) => s + x.likes, 0))}</b><span>مجموع پسند</span></div></div>
+    <div class="tabs"><button class="chip ${adminTab === 'articles' ? 'on' : ''}" data-t="articles">📚 مقالات</button>
+      <button class="chip ${adminTab === 'cats' ? 'on' : ''}" data-t="cats">🗂 دسته‌بندی‌ها</button>
+      <button class="chip ${adminTab === 'comments' ? 'on' : ''}" data-t="comments">💬 دیدگاه‌ها (${fa(pendingComments)} در انتظار)</button></div>
+    <div id="tabbody"></div></div>`;
+  $('#lo').onclick = async () => { await sb.auth.signOut(); renderAdmin(); };
+  $$('.tabs .chip').forEach(b => b.onclick = () => { adminTab = b.dataset.t; renderDashboard(user); });
+  const tb = $('#tabbody');
+  if (adminTab === 'articles') {
+    tb.innerHTML = `<div class="glass tbl-wrap"><table class="tbl"><thead><tr><th>عنوان</th><th>دسته</th><th>وضعیت</th><th>بازدید</th><th>بروزرسانی</th><th>عملیات</th></tr></thead><tbody>
+    ${L.map(x => `<tr><td><b>${x.featured ? '⭐ ' : ''}${esc(x.title)}</b></td><td>${esc(catOf(x.category).icon)} ${esc(catOf(x.category).name)}</td>
+      <td><span class="st ${x.status === 'published' ? 'p' : 'd'}">${x.status === 'published' ? 'منتشر شده' : 'پیش‌نویس'}</span></td>
+      <td>${fa(x.views)}</td><td>${fmtDate(x.updated_at)}</td>
+      <td><div class="row-act"><a class="btn ghost sm" href="#/admin/edit/${esc(x.id)}">ویرایش</a>
+      <button class="btn ghost sm" data-tg="${esc(x.id)}" data-s="${esc(x.status)}">${x.status === 'published' ? 'لغو انتشار' : 'انتشار'}</button>
+      ${x.status === 'published' ? `<a class="btn ghost sm" href="#/a/${esc(x.slug)}">مشاهده</a>` : ''}
+      <button class="btn danger sm" data-del="${esc(x.id)}">حذف</button></div></td></tr>`).join('') || '<tr><td colspan="6" class="empty">هنوز مقاله‌ای نیست</td></tr>'}
+    </tbody></table></div>`;
+    $$('[data-tg]', tb).forEach(b => b.onclick = async () => {
+      const to = b.dataset.s === 'published' ? 'draft' : 'published';
+      const patch = {status: to}; if (to === 'published') patch.published_at = new Date().toISOString();
+      const {error} = await sb.from('sg_articles').update(patch).eq('id', b.dataset.tg);
+      error ? toast(error.message, true) : (toast('وضعیت تغییر کرد ✅'), renderDashboard(user));
+    });
+    $$('[data-del]', tb).forEach(b => b.onclick = async () => {
+      if (!confirm('این مقاله برای همیشه حذف شود؟')) return;
+      const {error} = await sb.from('sg_articles').delete().eq('id', b.dataset.del);
+      error ? toast(error.message, true) : (toast('حذف شد'), renderDashboard(user));
+    });
+  } else if (adminTab === 'comments') {
+    tb.innerHTML = `<div class="glass tbl-wrap"><table class="tbl"><thead><tr><th>نام</th><th>مطلب</th><th>دیدگاه</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody>
+      ${comments.map(x => `<tr><td>${esc(x.author_name)}</td><td>${esc(x.sg_articles?.title || 'مطلب حذف‌شده')}</td><td style="min-width:220px;white-space:pre-wrap">${esc(x.body)}</td><td><span class="st ${x.status === 'approved' ? 'p' : 'd'}">${x.status === 'approved' ? 'تأییدشده' : x.status === 'pending' ? 'در انتظار' : 'ردشده'}</span></td><td><div class="row-act">${x.status !== 'approved' ? `<button class="btn sm" data-ca="${esc(x.id)}">تأیید</button>` : ''}<button class="btn danger sm" data-cr="${esc(x.id)}">رد</button></div></td></tr>`).join('') || '<tr><td colspan="5" class="empty">دیدگاهی وجود ندارد</td></tr>'}
+      </tbody></table></div>`;
+    $$('[data-ca]', tb).forEach(b => b.onclick = async () => {
+      const {error} = await sb.from('sg_comments').update({status:'approved'}).eq('id', b.dataset.ca);
+      error ? toast(error.message, true) : (toast('دیدگاه منتشر شد ✅'), renderDashboard(user));
+    });
+    $$('[data-cr]', tb).forEach(b => b.onclick = async () => {
+      const {error} = await sb.from('sg_comments').update({status:'rejected'}).eq('id', b.dataset.cr);
+      error ? toast(error.message, true) : (toast('دیدگاه رد شد'), renderDashboard(user));
+    });
+  } else {
+    tb.innerHTML = `<div class="glass tbl-wrap"><table class="tbl"><thead><tr><th>آیکن</th><th>نام</th><th>شناسه (slug)</th><th>رنگ</th><th></th></tr></thead><tbody>
+    ${CATS.map(x => `<tr><td style="font-size:1.5rem">${esc(x.icon)}</td><td>${esc(x.name)}</td><td class="dir-ltr">${esc(x.slug)}</td>
+      <td><span style="display:inline-block;width:22px;height:22px;border-radius:7px;background:${esc(x.color)}"></span></td>
+      <td><button class="btn danger sm" data-dc="${esc(x.id)}">حذف</button></td></tr>`).join('')}</tbody></table></div>
+    <form class="glass" id="cf" style="padding:20px;margin-top:16px;display:grid;grid-template-columns:70px 1fr 1fr 70px auto;gap:10px;align-items:end">
+      <div class="field" style="margin:0"><label>آیکن</label><input class="in" id="ci" value="✨" maxlength="4"></div>
+      <div class="field" style="margin:0"><label>نام</label><input class="in" id="cn" required></div>
+      <div class="field" style="margin:0"><label>slug (لاتین)</label><input class="in dir-ltr" id="cs" required pattern="[a-z0-9\-]+"></div>
+      <div class="field" style="margin:0"><label>رنگ</label><input class="in" type="color" id="cc" value="#2f7bff" style="padding:4px;height:46px"></div>
+      <button class="btn">افزودن</button></form>`;
+    $('#cf').onsubmit = async e => {
+      e.preventDefault();
+      const {error} = await sb.from('sg_categories').insert({icon: $('#ci').value || '✨', name: $('#cn').value.trim(), slug: $('#cs').value.trim(), color: $('#cc').value, sort: CATS.length + 1});
+      error ? toast(error.message, true) : (toast('دسته‌بندی اضافه شد ✅'), renderDashboard(user));
+    };
+    $$('[data-dc]', tb).forEach(b => b.onclick = async () => {
+      if (!confirm('این دسته‌بندی حذف شود؟ مقاله‌های آن حذف نمی‌شوند.')) return;
+      const {error} = await sb.from('sg_categories').delete().eq('id', b.dataset.dc);
+      error ? toast(error.message, true) : (toast('حذف شد'), renderDashboard(user));
+    });
+  }
+}
+
+async function renderEditor(id) {
+  app.innerHTML = `<div class="wrap"><div class="skel" style="margin:30px 0"></div></div>`;
+  const {data: cats} = await sb.from('sg_categories').select('*').order('sort'); CATS = cats || [];
+  let a = {title: '', slug: '', summary: '', content: '', category: CATS[0]?.slug || 'science', tags: [], cover_url: '', status: 'draft', featured: false};
+  if (id) {
+    const r = await sb.from('sg_articles').select('*').eq('id', id).maybeSingle();
+    if (r.error || !r.data) { toast('مقاله پیدا نشد', true); location.hash = '#/admin'; return; }
+    a = r.data;
+  }
+  app.innerHTML = `<div class="wrap">
+  <div class="dash-head"><h2>${id ? '✏️ ویرایش مقاله' : '✍️ انتشار مقاله جدید'}</h2><a class="btn ghost" href="#/admin">← بازگشت</a></div>
+  <form class="editor" id="ef">
+    <div class="glass panel">
+      <div class="field"><label>عنوان مقاله</label><input class="in" id="t" required maxlength="160" value="${esc(a.title)}"></div>
+      <div class="field"><label>چکیده کوتاه</label><textarea class="in" id="s" rows="3" maxlength="400">${esc(a.summary)}</textarea></div>
+      <div class="field"><label>متن کامل مقاله <span style="opacity:.6">(## تیتر، **پررنگ**، - لیست، ![توضیح](لینک تصویر))</span></label>
+        <div class="toolbar"><button type="button" data-ins="## |">تیتر</button><button type="button" data-ins="**|**">پررنگ</button><button type="button" data-ins="- |">لیست</button><button type="button" data-ins="![توضیح](https://|)">تصویر</button><button type="button" id="pv">👁 پیش‌نمایش</button></div>
+        <textarea class="in" id="c" rows="16">${esc(a.content)}</textarea>
+        <div class="prose glass" id="pvbox" style="display:none;padding:20px;margin-top:10px"></div></div>
+    </div>
+    <div class="glass panel">
+      <div class="field"><label>تصویر شاخص</label>
+        <div class="cover-prev" id="cp">${safeUrl(a.cover_url) ? `<img src="${esc(a.cover_url)}" alt="">` : 'بدون تصویر'}</div>
+        <input class="in" type="file" id="file" accept="image/jpeg,image/png,image/webp,image/gif">
+        <small style="color:var(--muted)">تصاویر جدید در پوشه images گیت‌هاب ذخیره می‌شوند؛ لینک تصاویر قدیمی حفظ می‌شود.</small>
+        <label style="margin-top:8px">یا لینک مستقیم تصویر (اختیاری)</label>
+        <input class="in dir-ltr" id="cu" placeholder="https://…" value="${esc(a.cover_url || '')}"></div>
+      <div class="field"><label>دسته‌بندی</label><select class="in" id="cat">${CATS.map(c => `<option value="${esc(c.slug)}" ${c.slug === a.category ? 'selected' : ''}>${esc(c.icon)} ${esc(c.name)}</option>`).join('')}</select></div>
+      <div class="field"><label>برچسب‌ها (با ویرگول جدا کنید)</label><input class="in" id="tg" value="${esc((a.tags || []).join('، '))}"></div>
+      <div class="field"><label>آدرس مقاله (slug لاتین)</label><input class="in dir-ltr" id="sl" required pattern="[a-z0-9\-]+" value="${esc(a.slug)}"></div>
+      <label class="switch"><input type="checkbox" id="ft" ${a.featured ? 'checked' : ''}> مقاله ویژه (در صفحه اصلی)</label>
+      <div class="field"><label>وضعیت انتشار</label><select class="in" id="st"><option value="draft" ${a.status === 'draft' ? 'selected' : ''}>پیش‌نویس</option><option value="published" ${a.status === 'published' ? 'selected' : ''}>منتشر شده</option></select></div>
+      <button class="btn" style="width:100%" id="sv">💾 ذخیره</button>
+    </div></form></div>`;
+
+  const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  let slugTouched = !!id;
+  $('#sl').addEventListener('input', () => slugTouched = true);
+  $('#t').addEventListener('input', () => { if (!slugTouched) $('#sl').value = slugify($('#t').value); });
+  $$('[data-ins]').forEach(b => b.onclick = () => {
+    const ta = $('#c'), [pre, post = ''] = b.dataset.ins.split('|'), s = ta.selectionStart, e = ta.selectionEnd;
+    ta.value = ta.value.slice(0, s) + pre + ta.value.slice(s, e) + post + ta.value.slice(e);
+    ta.focus(); ta.selectionStart = s + pre.length; ta.selectionEnd = e + pre.length;
+  });
+  $('#pv').onclick = () => { const p = $('#pvbox'); p.innerHTML = md($('#c').value); p.style.display = p.style.display === 'none' ? 'block' : 'none'; };
+  $('#cu').addEventListener('input', () => { const u = safeUrl($('#cu').value); $('#cp').innerHTML = u ? `<img src="${esc(u)}" alt="">` : 'بدون تصویر'; });
+
+  $('#file').addEventListener('change', async e => {
+    const f = e.target.files[0]; if (!f) return;
+    if (!/^image\/(jpeg|png|webp|gif)$/.test(f.type)) return toast('فقط تصویر JPG, PNG, WEBP یا GIF مجاز است', true);
+    if (f.size > 4 * 1024 * 1024) return toast('حجم تصویر باید کمتر از ۴ مگابایت باشد', true);
+    toast('در حال آپلود تصویر در GitHub…');
+    const session = await sb.auth.getSession();
+    if (!session.data.session) return toast('نشست مدیر منقضی شده؛ دوباره وارد شو', true);
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const base64 = String(reader.result).split(',')[1];
+        const {data, error} = await sb.functions.invoke(CONFIG.IMAGE_UPLOAD_FUNCTION, {body:{contentType:f.type, base64}});
+        if (error || !data?.ok) return toast('آپلود ناموفق: ' + (data?.error || error?.message || 'خطای نامشخص'), true);
+        $('#cu').value = data.url; $('#cp').innerHTML = `<img src="${esc(data.url)}" alt="">`;
+        toast('تصویر در پوشه images گیت‌هاب ذخیره شد ✅');
+      } catch (err) { toast('خطا در آپلود: ' + (err.message || err), true); }
+    };
+    reader.onerror = () => toast('خواندن فایل تصویر ناموفق بود', true);
+    reader.readAsDataURL(f);
+  });
+
+  $('#ef').addEventListener('submit', async e => {
+    e.preventDefault();
+    const content = $('#c').value, words = content.trim().split(/\s+/).filter(Boolean).length;
+    const status = $('#st').value;
+    const row = {
+      title: $('#t').value.trim(), slug: $('#sl').value.trim(), summary: $('#s').value.trim(), content,
+      category: $('#cat').value, tags: $('#tg').value.split(/[,،]/).map(x => x.trim()).filter(Boolean),
+      cover_url: safeUrl($('#cu').value.trim()) || null, status, featured: $('#ft').checked,
+      read_minutes: Math.max(1, Math.ceil(words / 180))
+    };
+    if (status === 'published' && !a.published_at) row.published_at = new Date().toISOString();
+    const b = $('#sv'); b.disabled = true; b.textContent = 'در حال ذخیره…';
+    // only one featured article at a time
+    if (row.featured) await sb.from('sg_articles').update({featured: false}).eq('featured', true).neq('id', id || '00000000-0000-0000-0000-000000000000');
+    const {error} = id ? await sb.from('sg_articles').update(row).eq('id', id) : await sb.from('sg_articles').insert(row);
+    b.disabled = false; b.textContent = '💾 ذخیره';
+    if (error) return toast(error.code === '23505' ? 'این آدرس (slug) قبلاً استفاده شده' : error.message, true);
+    toast('ذخیره شد ✅'); location.hash = '#/admin';
+  });
+}
+
+/* ============================== ROUTER ============================== */
+async function route() {
+  const h = location.hash.replace(/^#\/?/, ''), parts = h.split('/').filter(Boolean);
+  $('#links').classList.remove('open');
+  $$('[data-nav]').forEach(l => l.classList.toggle('on', l.dataset.nav === (parts[0] === 'admin' ? 'admin' : (parts[0] ? '' : 'home'))));
+  window.scrollTo(0, 0);
+  if (parts[0] === 'a' && parts[1]) await renderArticle(decodeURIComponent(parts[1]));
+  else if (parts[0] === 'admin') await renderAdmin(parts.slice(1));
+  else await renderHome();
+}
+addEventListener('hashchange', route);
+$('#burger').addEventListener('click', () => $('#links').classList.toggle('open'));
+$('[data-goto="explore"]').addEventListener('click', e => {
+  const t = $('#explore'); if (t) { e.preventDefault(); t.scrollIntoView({behavior: 'smooth'}); $('#links').classList.remove('open'); }
+});
+addEventListener('scroll', () => {
+  const d = document.documentElement, p = d.scrollTop / Math.max(1, d.scrollHeight - d.clientHeight);
+  $('#progress').style.width = (p * 100) + '%';
+}, {passive: true});
+if (sb) sb.auth.onAuthStateChange((ev) => { if ((ev === 'SIGNED_OUT') && location.hash.startsWith('#/admin')) route(); });
+route();
+</script>
+</body>
+</html>
