@@ -241,6 +241,17 @@ textarea.in{resize:vertical;min-height:110px;line-height:1.9}
 #toast.show{transform:translateX(-50%) translateY(0)}
 #toast.err{border-color:var(--danger)}
 
+.rnd-btn{background:var(--glass);border:1px solid var(--line);color:var(--gold)!important}
+.rnd-btn:hover{border-color:var(--gold)}
+.toc{padding:20px 24px;margin:0 0 26px}
+.toc b{color:var(--turq);font-size:1rem}
+.toc ol{margin:10px 22px 0 0;display:grid;gap:6px}
+.toc a{color:var(--muted);font-size:.95rem;cursor:pointer;transition:.2s}
+.toc a:hover{color:#fff;padding-right:4px}
+#totop{position:fixed;left:18px;bottom:22px;z-index:90;width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--turq));color:#04101f;font-size:1.3rem;font-weight:900;
+  box-shadow:0 10px 30px rgba(34,225,211,.35);opacity:0;transform:translateY(20px);pointer-events:none;transition:.3s}
+#totop.show{opacity:1;transform:none;pointer-events:auto}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
 .reveal.in-view{opacity:1;transform:none}
 
@@ -270,7 +281,9 @@ textarea.in{resize:vertical;min-height:110px;line-height:1.9}
       <a href="#/" data-nav="home">صفحه اصلی</a>
       <a href="#/" data-goto="explore">شگفتی‌ها</a>
       <a class="cta" href="https://rubika.ir/ShegeftiDan" target="_blank" rel="noopener">📢 کانال روبیکا</a>
+      <a href="#/saved" data-nav="saved">🔖 ذخیره‌ها</a>
       <a href="#/admin" data-nav="admin">پنل مدیریت</a>
+      <button class="rnd-btn" id="rnd" title="یک شگفتی تصادفی">🎲 تصادفی</button>
     </nav>
   </div>
 </header>
@@ -287,6 +300,7 @@ textarea.in{resize:vertical;min-height:110px;line-height:1.9}
     <div class="copy">© تمامی حقوق برای سایت شگفتی‌دان محفوظ است.</div>
   </div>
 </footer>
+<button id="totop" aria-label="بالای صفحه">↑</button>
 <div id="toast"></div>
 <noscript><div style="padding:30px;text-align:center">برای مشاهده این سایت جاوااسکریپت را فعال کنید.</div></noscript>
 
@@ -378,6 +392,12 @@ function md(text) {
 let CATS = [], ARTS = [], filter = {q: '', cat: 'all', sort: 'new'};
 const catOf = slug => CATS.find(c => c.slug === slug) || {slug, name: slug, icon: '✨', color: '#2f7bff'};
 const LIST_COLS = 'id,slug,title,summary,category,tags,cover_url,featured,views,likes,read_minutes,published_at';
+
+/* saved (bookmarked) articles: stored per browser by slug */
+const SAVED_KEY = 'sg_saved';
+function getSaved() { try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch (_) { return []; } }
+function setSaved(list) { try { localStorage.setItem(SAVED_KEY, JSON.stringify(list)); } catch (_) {} }
+function isSaved(slug) { return getSaved().includes(slug); }
 
 async function loadPublic() {
   const [c, a] = await Promise.all([
@@ -518,7 +538,7 @@ async function renderArticle(slug) {
   document.title = a.title + ' | شگفتی‌دان';
   setMeta('robots', 'index, follow');
   setMeta('description', a.summary || a.title);
-  const cat = catOf(a.category), liked = localStorage.getItem('sg_like_' + a.id) === '1';
+  const cat = catOf(a.category), liked = localStorage.getItem('sg_like_' + a.id) === '1', saved = isSaved(a.slug);
   const related = ARTS.filter(x => x.category === a.category && x.id !== a.id).slice(0, 3);
   app.innerHTML = `<article class="article">
     <a class="back" href="#/">→ بازگشت به صفحه اصلی</a>
@@ -531,6 +551,7 @@ async function renderArticle(slug) {
     <div class="glass actions">
       <button class="btn ghost like ${liked ? 'on' : ''}" id="like">${liked ? '❤️' : '🤍'} <span id="lcount">${fa(a.likes)}</span></button>
       <button class="btn ghost" id="share">🔗 اشتراک‌گذاری</button>
+      <button class="btn ghost" id="save">${saved ? '🔖 ذخیره شده ✓' : '🔖 ذخیره'}</button>
       <a class="btn" href="${esc(CONFIG.RUBIKA)}" target="_blank" rel="noopener">📢 کانال روبیکا</a>
       <div class="tags" style="margin-right:auto">${(a.tags || []).map(t => `<span>#${esc(t)}</span>`).join('')}</div>
     </div>
@@ -549,6 +570,8 @@ async function renderArticle(slug) {
   </article>`;
   observe();
 
+  buildToc();
+
   // view counter: once per tab session
   if (!sessionStorage.getItem('sg_v_' + a.id)) {
     sessionStorage.setItem('sg_v_' + a.id, '1');
@@ -566,6 +589,12 @@ async function renderArticle(slug) {
     const url = location.href;
     if (navigator.share) { try { await navigator.share({title: a.title, url}); return; } catch (_) {} }
     try { await navigator.clipboard.writeText(url); toast('لینک کپی شد ✅'); } catch (_) { toast(url); }
+  });
+  $('#save').addEventListener('click', () => {
+    const list = getSaved(), on = list.includes(a.slug);
+    setSaved(on ? list.filter(s => s !== a.slug) : [...list, a.slug]);
+    $('#save').textContent = on ? '🔖 ذخیره' : '🔖 ذخیره شده ✓';
+    toast(on ? 'از ذخیره‌ها حذف شد' : 'به ذخیره‌ها اضافه شد ✅');
   });
   await loadArticleComments(a.id);
   $('#commentForm').addEventListener('submit', async e => {
@@ -801,17 +830,58 @@ async function renderEditor(id) {
   });
 }
 
+/* ---------- table of contents for long articles ---------- */
+function buildToc() {
+  const pr = $('#prose'); if (!pr) return;
+  const hs = $$('h2', pr); if (hs.length < 2) return;
+  const box = document.createElement('nav');
+  box.className = 'glass toc';
+  box.innerHTML = '<b>📑 فهرست مطلب</b><ol>' + hs.map((h, i) => {
+    h.id = 'h-' + i;
+    return `<li><a href="#" data-t="h-${i}">${esc(h.textContent)}</a></li>`;
+  }).join('') + '</ol>';
+  box.querySelectorAll('a').forEach(l => l.addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById(l.dataset.t)?.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }));
+  pr.before(box);
+}
+
+/* ---------- saved articles page ---------- */
+async function renderSaved() {
+  document.title = 'ذخیره‌ها | شگفتی‌دان';
+  if (!sb) return setupNotice();
+  if (!ARTS.length) { try { await loadPublic(); } catch (e) { return dbError(e); } }
+  const slugs = getSaved(), list = ARTS.filter(a => slugs.includes(a.slug));
+  app.innerHTML = `<div class="wrap"><div class="sec-head" style="margin-top:40px"><div><h2>🔖 ذخیره‌های من</h2>
+    <p>این مطالب فقط در همین مرورگر ذخیره شده‌اند</p></div></div>
+    <div class="grid">${list.length ? list.map(cardHTML).join('') :
+      '<div class="empty" style="grid-column:1/-1"><div class="big">🔖</div><p>هنوز چیزی ذخیره نکرده‌ای. در صفحه هر مطلب دکمه «ذخیره» را بزن.</p><br><a class="btn" href="#/">برو به شگفتی‌ها</a></div>'}
+    </div></div>`;
+  observe();
+}
+
 /* ============================== ROUTER ============================== */
 async function route() {
   const h = location.hash.replace(/^#\/?/, ''), parts = h.split('/').filter(Boolean);
   $('#links').classList.remove('open');
-  $$('[data-nav]').forEach(l => l.classList.toggle('on', l.dataset.nav === (parts[0] === 'admin' ? 'admin' : (parts[0] ? '' : 'home'))));
+  const current = (parts[0] === 'admin' || parts[0] === 'saved') ? parts[0] : (parts[0] ? '' : 'home');
+  $$('[data-nav]').forEach(l => l.classList.toggle('on', l.dataset.nav === current));
   window.scrollTo(0, 0);
   if (parts[0] === 'a' && parts[1]) await renderArticle(decodeURIComponent(parts[1]));
+  else if (parts[0] === 'saved') await renderSaved();
   else if (parts[0] === 'admin') await renderAdmin(parts.slice(1));
   else await renderHome();
 }
 addEventListener('hashchange', route);
+$('#rnd').addEventListener('click', async () => {
+  if (!sb) return toast('اتصال به سرور برقرار نیست', true);
+  if (!ARTS.length) { try { await loadPublic(); } catch (_) {} }
+  if (!ARTS.length) return toast('فعلاً مطلبی برای نمایش نیست', true);
+  const cur = location.hash.startsWith('#/a/') ? decodeURIComponent(location.hash.slice(4)) : '';
+  const pool = ARTS.filter(a => a.slug !== cur), list = pool.length ? pool : ARTS;
+  location.hash = '#/a/' + list[Math.floor(Math.random() * list.length)].slug;
+});
 $('#burger').addEventListener('click', () => $('#links').classList.toggle('open'));
 $('[data-goto="explore"]').addEventListener('click', e => {
   const t = $('#explore'); if (t) { e.preventDefault(); t.scrollIntoView({behavior: 'smooth'}); $('#links').classList.remove('open'); }
@@ -819,7 +889,12 @@ $('[data-goto="explore"]').addEventListener('click', e => {
 addEventListener('scroll', () => {
   const d = document.documentElement, p = d.scrollTop / Math.max(1, d.scrollHeight - d.clientHeight);
   $('#progress').style.width = (p * 100) + '%';
+  $('#totop').classList.toggle('show', d.scrollTop > 600);
 }, {passive: true});
+$('#totop').addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
+addEventListener('keydown', e => {
+  if (e.key === '/' && $('#q') && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); $('#q').focus(); }
+});
 /* ---------- loading: the page paints first; the library loads without blocking, with a fallback CDN ---------- */
 const SUPABASE_CDNS = [
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
