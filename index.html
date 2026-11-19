@@ -539,7 +539,7 @@ async function renderArticle(slug) {
       <p class="comments-intro">نظرت را درباره این شگفتی بنویس. دیدگاه‌ها پس از بررسی منتشر می‌شوند.</p>
       <form id="commentForm" class="comment-form">
         <input class="in" id="commentName" maxlength="40" minlength="2" required placeholder="نام شما">
-        <input class="in" id="commentWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px" placeholder="وب‌سایت">
+        <input class="in" id="commentWebsite" tabindex="-1" autocomplete="off" aria-hidden="true" hidden placeholder="وب‌سایت">
         <textarea class="in wide" id="commentBody" maxlength="1200" minlength="3" required rows="4" placeholder="دیدگاه شما..."></textarea>
         <button class="btn wide" id="commentSubmit">ارسال دیدگاه</button>
       </form>
@@ -820,7 +820,6 @@ addEventListener('scroll', () => {
   const d = document.documentElement, p = d.scrollTop / Math.max(1, d.scrollHeight - d.clientHeight);
   $('#progress').style.width = (p * 100) + '%';
 }, {passive: true});
-
 /* ---------- loading: the page paints first; the library loads without blocking, with a fallback CDN ---------- */
 const SUPABASE_CDNS = [
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
