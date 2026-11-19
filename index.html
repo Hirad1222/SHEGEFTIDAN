@@ -9,6 +9,8 @@
 <meta property="og:title" content="شگفتی‌دان | دنیا را متفاوت ببین!">
 <meta property="og:description" content="جذاب‌ترین مطالب علمی، نجوم، طبیعت، تاریخ و فناوری در یک نگاه.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://hirad1222.github.io/SHEGEFTIDAN/images/brand/logo.png">
+<link rel="icon" type="image/png" href="images/brand/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -252,6 +254,10 @@ textarea.in{resize:vertical;min-height:110px;line-height:1.9}
   background:linear-gradient(135deg,var(--blue),var(--turq));color:#04101f;font-size:1.3rem;font-weight:900;
   box-shadow:0 10px 30px rgba(34,225,211,.35);opacity:0;transform:translateY(20px);pointer-events:none;transition:.3s}
 #totop.show{opacity:1;transform:none;pointer-events:auto}
+.brand-logo{width:44px;height:44px;border-radius:12px;object-fit:cover;box-shadow:0 0 24px rgba(34,225,211,.45)}
+.hero-logo{width:min(320px,70vw);height:auto;margin:0 auto 18px;border-radius:50%;display:block;
+  filter:drop-shadow(0 0 40px rgba(47,123,255,.45));animation:float 7s ease-in-out infinite}
+.hero.has-logo h1{display:none}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
 .reveal.in-view{opacity:1;transform:none}
 
@@ -275,7 +281,7 @@ textarea.in{resize:vertical;min-height:110px;line-height:1.9}
 
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="#/"><i>✨</i><span>شگفتی‌دان</span></a>
+    <a class="logo" href="#/"><img class="brand-logo" src="images/brand/logo.png" alt="" onerror="this.outerHTML='<i>✨</i>'"><span>شگفتی‌دان</span></a>
     <button class="burger" id="burger" aria-label="منو">☰</button>
     <nav class="links" id="links">
       <a href="#/" data-nav="home">صفحه اصلی</a>
@@ -328,6 +334,13 @@ function setMeta(name, content) {
   let m = document.querySelector(`meta[name="${name}"]`);
   if (!m) { m = document.createElement('meta'); m.name = name; document.head.appendChild(m); }
   m.content = content;
+}
+/* JSON-LD for the current article (helps search engines show a rich result) */
+function setLd(obj) {
+  let s = document.getElementById('ld-json');
+  if (!obj) { if (s) s.remove(); return; }
+  if (!s) { s = document.createElement('script'); s.type = 'application/ld+json'; s.id = 'ld-json'; document.head.appendChild(s); }
+  s.textContent = JSON.stringify(obj);
 }
 let toastT;
 function toast(msg, err) {
@@ -462,6 +475,7 @@ async function renderHome() {
   <section class="hero"><div class="orbit"><div class="ring"><b></b></div><div class="ring"><b></b></div><div class="ring"><b></b></div><div class="core"></div></div>
     <div class="wrap">
       <span class="badge">دانشنامه شگفتی‌های جهان</span>
+      <img class="hero-logo" src="images/brand/logo.png" alt="لوگوی شگفتی‌دان" onload="this.closest('.hero').classList.add('has-logo')" onerror="this.remove()">
       <h1>شگفتی‌دان</h1>
       <p class="sub">دنیا را متفاوت ببین! جذاب‌ترین مطالب علمی، نجوم، طبیعت، تاریخ و فناوری در فضایی مدرن</p>
       <div class="glass search"><span>🔍</span><input id="q" placeholder="جستجو در شگفتی‌ها…" autocomplete="off"><button class="btn" id="go">بگرد</button></div>
@@ -495,7 +509,7 @@ function drawFact() {
   const box = $('#factbox'); if (!box || !ARTS.length) return box && (box.innerHTML = '');
   const a = ARTS[Math.floor(Math.random() * ARTS.length)], cat = catOf(a.category);
   box.innerHTML = `<div class="glass fact reveal"><div class="emo">${esc(cat.icon)}</div>
-    <div><h3>💡 آیا می‌دانستید؟</h3><p>${esc(a.summary)}</p></div>
+    <div><h3>💡 آیا می‌دانستید؟</h3><p>${esc(a.summary || a.title)}</p></div>
     <div style="display:flex;gap:8px;margin-right:auto;flex-wrap:wrap"><a class="btn sm" href="#/a/${esc(a.slug)}">ادامه مطلب</a><button class="btn ghost sm" id="nextfact">شگفتی دیگر 🎲</button></div></div>`;
   $('#nextfact').addEventListener('click', drawFact); observe();
 }
@@ -531,13 +545,16 @@ function drawGrid() {
 async function renderArticle(slug) {
   if (!sb) return setupNotice();
   app.innerHTML = `<div class="article"><div class="skel"></div></div>`;
-  if (!CATS.length) { try { await loadPublic(); } catch (e) { return dbError(e); } }
+  if (!CATS.length || !ARTS.length) { try { await loadPublic(); } catch (e) { return dbError(e); } }
   const {data: a, error} = await sb.from('sg_articles').select('*').eq('slug', slug).eq('status', 'published').maybeSingle();
   if (error) return dbError(error);
   if (!a) { app.innerHTML = `<div class="wrap"><div class="empty"><div class="big">🛸</div><h2>این مقاله پیدا نشد</h2><br><a class="btn" href="#/">بازگشت به صفحه اصلی</a></div></div>`; return; }
   document.title = a.title + ' | شگفتی‌دان';
   setMeta('robots', 'index, follow');
   setMeta('description', a.summary || a.title);
+  setLd({'@context': 'https://schema.org', '@type': 'Article', headline: a.title, description: a.summary || a.title,
+    datePublished: a.published_at || undefined, inLanguage: 'fa', image: safeUrl(a.cover_url) || undefined,
+    publisher: {'@type': 'Organization', name: 'شگفتی‌دان'}});
   const cat = catOf(a.category), liked = localStorage.getItem('sg_like_' + a.id) === '1', saved = isSaved(a.slug);
   const related = ARTS.filter(x => x.category === a.category && x.id !== a.id).slice(0, 3);
   app.innerHTML = `<article class="article">
@@ -551,6 +568,8 @@ async function renderArticle(slug) {
     <div class="glass actions">
       <button class="btn ghost like ${liked ? 'on' : ''}" id="like">${liked ? '❤️' : '🤍'} <span id="lcount">${fa(a.likes)}</span></button>
       <button class="btn ghost" id="share">🔗 اشتراک‌گذاری</button>
+      <a class="btn ghost" href="https://t.me/share/url?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(a.title)}" target="_blank" rel="noopener">✈️ تلگرام</a>
+      <a class="btn ghost" href="https://wa.me/?text=${encodeURIComponent(a.title + ' ' + location.href)}" target="_blank" rel="noopener">💬 واتساپ</a>
       <button class="btn ghost" id="save">${saved ? '🔖 ذخیره شده ✓' : '🔖 ذخیره'}</button>
       <a class="btn" href="${esc(CONFIG.RUBIKA)}" target="_blank" rel="noopener">📢 کانال روبیکا</a>
       <div class="tags" style="margin-right:auto">${(a.tags || []).map(t => `<span>#${esc(t)}</span>`).join('')}</div>
@@ -865,6 +884,7 @@ async function renderSaved() {
 async function route() {
   const h = location.hash.replace(/^#\/?/, ''), parts = h.split('/').filter(Boolean);
   $('#links').classList.remove('open');
+  setLd(null);
   const current = (parts[0] === 'admin' || parts[0] === 'saved') ? parts[0] : (parts[0] ? '' : 'home');
   $$('[data-nav]').forEach(l => l.classList.toggle('on', l.dataset.nav === current));
   window.scrollTo(0, 0);
