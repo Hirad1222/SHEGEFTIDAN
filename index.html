@@ -233,7 +233,7 @@ textarea.in{resize:vertical;min-height:110px;line-height:1.9}
 .cover-prev img{width:100%;height:100%;object-fit:cover}
 .switch{display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer}
 .switch input{accent-color:var(--turq);width:18px;height:18px}
-.notice{padding:26px;margin:40px auto;max-width:720px;border-color:rgba(245,199,66,.4);background:rgba(245,197,66,.07)}
+.notice{padding:26px;margin:40px auto;max-width:720px;border-color:rgba(245,197,66,.4);background:rgba(245,197,66,.07)}
 .notice h3{color:var(--gold);margin-bottom:8px}
 .notice code{background:rgba(0,0,0,.4);padding:2px 8px;border-radius:6px;direction:ltr;display:inline-block;font-size:.85rem}
 .skel{height:300px;border-radius:var(--r);background:linear-gradient(100deg,rgba(255,255,255,.04) 30%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.04) 70%);background-size:200% 100%;animation:sk 1.4s infinite}
@@ -328,6 +328,15 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fa = n => Number(n || 0).toLocaleString('fa-IR');
 const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
+/* Rubika images are mirrored to GitHub Pages (slow to deploy after each push) and kept in Supabase Storage.
+   If the Pages copy is not live yet, fall back to the Supabase copy once. */
+const RUBIKA_CHAT = 'c0EJ8Cj0c2f10086ab8e33752a75a272';
+function imgFallback(img) {
+  const m = (img.currentSrc || img.src || '').match(/\/SHEGEFTIDAN\/images\/rubika\/([A-Za-z0-9_-]+\.[a-z]+)$/);
+  if (!m || img.dataset.fb) return;
+  img.dataset.fb = '1';
+  img.src = CONFIG.SUPABASE_URL + '/storage/v1/object/public/images/rubika/' + RUBIKA_CHAT + '/' + m[1];
+}
 const fmtDate = d => d ? new Intl.DateTimeFormat('fa-IR', {dateStyle:'medium'}).format(new Date(d)) : '';
 const app = $('#app');
 function setMeta(name, content) {
@@ -424,7 +433,7 @@ async function loadPublic() {
 /* ---------- UI bits ---------- */
 function coverHTML(a, big) {
   const cat = catOf(a.category), u = safeUrl(a.cover_url);
-  const inner = u ? `<img loading="lazy" src="${esc(u)}" alt="${esc(a.title)}">`
+  const inner = u ? `<img loading="lazy" src="${esc(u)}" alt="${esc(a.title)}" onerror="imgFallback(this)">`
     : `<div class="ph" style="background:linear-gradient(135deg,${esc(cat.color)}44,#0a1330 70%)">${esc(cat.icon)}</div>`;
   return `<div class="cover${big ? ' a-cover' : ''}">${inner}${big ? '' : `<span class="pill tag">${esc(cat.icon)} ${esc(cat.name)}</span>`}</div>`;
 }
